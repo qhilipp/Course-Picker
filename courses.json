@@ -1,0 +1,146 @@
+{
+  "meta": {
+    "title": "Kurswahl"
+  },
+  "requirements": {
+    "totalCredits": 53,
+    "theoreticalCredits": 10,
+    "overagePenalty": 0.75,
+    "maxOverage": 24,
+    "areaQuotas": [18, 8, 8],
+    "areas": [
+      { "id": "mla", "name": "Maschinelles Lernen und Datenanalyse", "short": "MLA" },
+      { "id": "alg", "name": "Algorithmen", "short": "ALG" },
+      { "id": "cgv", "name": "Computergrafik und Vision", "short": "CGV" },
+      { "id": "sp", "name": "Sicherheit und Datenschutz", "short": "SP" }
+    ]
+  },
+  "courses": [
+    {
+      "id": "IN2346",
+      "name": "Introduction to Deep Learning",
+      "credits": 6,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2361",
+      "name": "Natural Language Processing",
+      "credits": 6,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "CIT433021",
+      "name": "Fundamentals of Foundation Models",
+      "credits": 5,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "CITHN2014",
+      "name": "Foundations and Application of Generative AI",
+      "credits": 6,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "CIT4230003",
+      "name": "Advanced Machine Learning: Deep Generative Models",
+      "credits": 3,
+      "semester": "summer",
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2064",
+      "name": "Maschinelles Lernen",
+      "credits": 8,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2239",
+      "name": "Algorithmic Game Theory",
+      "credits": 5,
+      "semester": "summer",
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "CIT423012",
+      "name": "Statistical and Computational Hardness of Learning",
+      "credits": 5,
+      "semester": "summer",
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2304",
+      "name": "Online and Approximation Algorithms",
+      "credits": 8,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "CIT423011",
+      "name": "Topics in Computational Social Choice",
+      "credits": 5,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2015",
+      "name": "Image Synthesis",
+      "credits": 5,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2369",
+      "name": "Industrielle Bildverarbeitung",
+      "credits": 6,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2101",
+      "name": "Network Security",
+      "credits": 5,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "EI75671",
+      "name": "Ringvorlesung Systemsicherheit",
+      "credits": 3,
+      "semester": "winter",
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    }
+  ]
+}
