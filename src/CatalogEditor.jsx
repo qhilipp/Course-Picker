@@ -17,15 +17,14 @@ export function CatalogEditor({
   open,
   onClose,
   source,
-  defaultRaw,
   customRaw,
   tumRaw,
   tumStatus,
   tumMessage,
-  onUseDefault,
   onUseTum,
   onUseCustom,
   onSaveCustom,
+  onExport,
 }) {
   const titleId = useId();
   const [draft, setDraft] = useState(null);
@@ -44,8 +43,7 @@ export function CatalogEditor({
   if (!open) return null;
 
   const viewingCustom = source === "custom" && customRaw;
-  const viewingTum = source === "tum" && tumRaw;
-  const raw = viewingCustom ? customRaw : viewingTum ? tumRaw : defaultRaw;
+  const raw = viewingCustom ? customRaw : tumRaw;
   const areas = Array.isArray(raw?.requirements?.areas) ? raw.requirements.areas : [];
   const courses = Array.isArray(raw?.courses) ? raw.courses : [];
 
@@ -165,7 +163,7 @@ export function CatalogEditor({
         <header className="dialog-head">
           <div>
             <h2 id={titleId}>Modules</h2>
-            <p>The TUM catalog is loaded from TUMonline each time you open it. Edits become My list and stay in this browser.</p>
+            <p>The TUM catalog loads from TUMonline whenever you open the app. Edits become My list and stay in this browser.</p>
           </div>
           <button type="button" className="text-button" onClick={onClose}>
             Close
@@ -173,10 +171,7 @@ export function CatalogEditor({
         </header>
 
         <div className="source-switch" role="group" aria-label="Module list">
-          <button type="button" aria-pressed={source === "default"} onClick={onUseDefault}>
-            Default list
-          </button>
-          <button type="button" aria-pressed={source === "tum"} onClick={onUseTum}>
+          <button type="button" aria-pressed={source !== "custom"} onClick={onUseTum}>
             TUM catalog
           </button>
           <button type="button" aria-pressed={source === "custom"} onClick={onUseCustom} disabled={!customRaw}>
@@ -209,6 +204,9 @@ export function CatalogEditor({
           </button>
           <button type="button" className="text-button" disabled={tumStatus === "loading"} onClick={onUseTum}>
             {tumStatus === "loading" ? "Loading TUM…" : "Refresh TUM catalog"}
+          </button>
+          <button type="button" className="text-button" onClick={onExport} disabled={!raw}>
+            Download JSON
           </button>
         </div>
         {fileError && <p className="form-error">{fileError}</p>}

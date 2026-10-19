@@ -206,10 +206,10 @@ async function loadPage(url) {
   try {
     response = await fetch(url);
   } catch {
-    throw new Error("The TUM study plan could not be loaded. Run the app with npm run dev and try again.");
+    throw new Error("The TUM study plan could not be loaded. Check your connection and try again.");
   }
   if (!response.ok) {
-    throw new Error("The TUM study plan could not be loaded. Run the app with npm run dev and try again.");
+    throw new Error("The TUM study plan could not be loaded. Check your connection and try again.");
   }
   return response.text();
 }

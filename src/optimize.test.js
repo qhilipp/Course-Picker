@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { evaluateSelection, normalizeCatalog, recommend } from "./optimize.js";
+import { evaluateSelection, normalizeCatalog, planAlternatives, recommend } from "./optimize.js";
 
 const baseRequirements = {
   totalCredits: 10,
@@ -411,4 +411,31 @@ test("der Beispielkatalog liefert einen gültigen Plan", () => {
   console.log(
     `Beispielplan: ${plan.courses.length} Kurse, ${plan.totals.credits} ECTS, Nutzen ${plan.score}, ${elapsed.toFixed(0)} ms`,
   );
+});
+
+test("Alternativen tauschen einen Kurs gegen einen gleich großen, ohne das Defizit zu erhöhen", () => {
+  const raw = {
+    requirements: { ...baseRequirements, theoreticalCredits: 4 },
+    courses: [
+      course({ id: "a1", name: "A1", area: "a", credits: 6, preference: 3, theoretical: true }),
+      course({ id: "b1", name: "B1", area: "b", credits: 4, preference: 3 }),
+      course({ id: "a2", name: "A2", area: "a", credits: 6, preference: 0, theoretical: true }),
+      course({ id: "c6", name: "C6", area: "c", credits: 6, preference: 1, theoretical: true }),
+      course({ id: "zu-klein", name: "Klein", area: "a", credits: 5, preference: 5, theoretical: true }),
+      course({ id: "ohne-theorie", name: "Ohne", area: "a", credits: 6, preference: 5, theoretical: false }),
+      course({ id: "sommer", name: "Sommer", area: "a", credits: 6, semester: "summer", preference: 5, theoretical: true }),
+      course({ id: "flach", name: "Flach", area: "a", credits: 5, preference: 0, theoretical: false }),
+    ],
+  };
+  const catalog = normalizeCatalog(raw);
+  const semesters = { winter: true, summer: false };
+  const result = recommend(catalog.courses, catalog.requirements, { semesters });
+  const swaps = planAlternatives(result, catalog.courses, catalog.requirements, semesters);
+  const forOhne = swaps.filter((swap) => swap.outgoing.id === "ohne-theorie").map((swap) => swap.incoming.id);
+  assert.deepEqual(forOhne.sort(), ["a1", "a2", "c6"]);
+  assert.equal(swaps.some((swap) => swap.incoming.id === "sommer" || swap.incoming.id === "flach"), false);
+
+  const pinned = recommend(catalog.courses, catalog.requirements, { semesters, forced: { "ohne-theorie": true } });
+  const pinnedSwaps = planAlternatives(pinned, catalog.courses, catalog.requirements, semesters);
+  assert.equal(pinnedSwaps.some((swap) => swap.outgoing.id === "ohne-theorie"), false);
 });

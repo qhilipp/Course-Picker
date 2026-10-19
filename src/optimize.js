@@ -702,6 +702,39 @@ function solve(courses, requirements, { overagePenalty, theoryPenalty, maxOverag
   return { ...plans[0], plans };
 }
 
+export function planAlternatives(plan, courses, requirements, semesters) {
+  if (!plan?.courses?.length || !requirements) return [];
+  const chosen = new Set(plan.courses.map((course) => course.id));
+  const allowWinter = semesters?.winter !== false;
+  const allowSummer = semesters?.summer !== false;
+  const baseline = plan.deficitUnits ?? 0;
+  const swaps = [];
+  for (const outgoing of plan.courses) {
+    if (outgoing.forced) continue;
+    for (const incoming of courses) {
+      if (chosen.has(incoming.id) || incoming.units !== outgoing.units) continue;
+      const semesterOpen =
+        incoming.semester == null || (incoming.semester === "winter" ? allowWinter : allowSummer);
+      if (!semesterOpen) continue;
+      const next = [];
+      for (const course of plan.courses) next.push(course.id === outgoing.id ? incoming : course);
+      const evaluation = evaluateSelection(next, requirements, 0, 0);
+      if (evaluation.deficitUnits > baseline) continue;
+      swaps.push({ outgoing, incoming });
+    }
+  }
+  swaps.sort((a, b) => {
+    const areaA = a.incoming.area === a.outgoing.area ? 0 : 1;
+    const areaB = b.incoming.area === b.outgoing.area ? 0 : 1;
+    return (
+      areaA - areaB ||
+      a.outgoing.id.localeCompare(b.outgoing.id) ||
+      a.incoming.name.localeCompare(b.incoming.name)
+    );
+  });
+  return swaps;
+}
+
 export function recommend(courses, requirements, options = {}) {
   if (!requirements) return emptyResult(null);
   const overagePenalty = options.overagePenalty ?? requirements.overagePenalty ?? 0.75;

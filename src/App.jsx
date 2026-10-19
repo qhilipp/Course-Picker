@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import rawCatalog from "../courses.json";
 import { CatalogEditor } from "./CatalogEditor.jsx";
-import { normalizeCatalog, recommend } from "./optimize.js";
+import { normalizeCatalog, planAlternatives, recommend } from "./optimize.js";
 import { buildImportedCatalog, fetchTumElectives } from "./tumCatalog.js";
 
 const STORAGE_KEY = "course-picker-v1";
 const CATALOG_KEY = "course-picker-catalog";
 const TUM_CACHE_KEY = "course-picker-tum";
+const HINTS_KEY = "course-picker-hints";
 const EXTRA_CREDITS = 10;
 
 const PREFERENCES = [
@@ -132,9 +132,7 @@ export function App() {
   );
   const [semesters, setSemesters] = useState(() => readSemesters(stored.semesters));
   const [extraElectives, setExtraElectives] = useState(() => stored.extraElectives === true);
-  const [catalogSource, setCatalogSource] = useState(() =>
-    stored.catalogSource === "custom" || stored.catalogSource === "tum" ? stored.catalogSource : "default",
-  );
+  const [catalogSource, setCatalogSource] = useState(() => (stored.catalogSource === "custom" ? "custom" : "tum"));
   const [customRaw, setCustomRaw] = useState(() => readStoredCatalog(CATALOG_KEY));
   const [tumRaw, setTumRaw] = useState(() => readStoredCatalog(TUM_CACHE_KEY));
   const [tumNonce, setTumNonce] = useState(0);
@@ -151,17 +149,22 @@ export function App() {
   const settingsRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const [planIndex, setPlanIndex] = useState(0);
+  const [altPlanIndex, setAltPlanIndex] = useState(null);
+  const [hintsOpen, setHintsOpen] = useState(() => {
+    try {
+      return localStorage.getItem(HINTS_KEY) !== "seen";
+    } catch {
+      return true;
+    }
+  });
+  const [infoOpen, setInfoOpen] = useState(false);
+  const infoRef = useRef(null);
 
-  const activeRaw =
-    catalogSource === "tum" && tumRaw
-      ? tumRaw
-      : catalogSource === "custom" && customRaw
-        ? customRaw
-        : rawCatalog;
-  const catalog = useMemo(() => normalizeCatalog(activeRaw), [activeRaw]);
+  const activeRaw = catalogSource === "custom" && customRaw ? customRaw : tumRaw;
+  const catalog = useMemo(() => (activeRaw ? normalizeCatalog(activeRaw) : null), [activeRaw]);
   const requirements = useMemo(
-    () => withExtraCredits(catalog.requirements, extraElectives),
-    [catalog.requirements, extraElectives],
+    () => withExtraCredits(catalog?.requirements ?? null, extraElectives),
+    [catalog, extraElectives],
   );
 
   useEffect(() => {
@@ -193,7 +196,7 @@ export function App() {
     })
       .then((collected) => {
         if (cancelled) return;
-        const next = buildImportedCatalog(rawCatalog, collected);
+        const next = buildImportedCatalog(null, collected);
         setTumRaw(next);
         try {
           localStorage.setItem(TUM_CACHE_KEY, JSON.stringify(next));
@@ -215,12 +218,16 @@ export function App() {
   }, [catalogSource, tumNonce]);
 
   useEffect(() => {
-    if (!settingsOpen) return undefined;
+    if (!settingsOpen && !infoOpen) return undefined;
     function onPointer(event) {
-      if (!settingsRef.current?.contains(event.target)) setSettingsOpen(false);
+      if (settingsOpen && !settingsRef.current?.contains(event.target)) setSettingsOpen(false);
+      if (infoOpen && !infoRef.current?.contains(event.target)) setInfoOpen(false);
     }
     function onKey(event) {
-      if (event.key === "Escape") setSettingsOpen(false);
+      if (event.key === "Escape") {
+        setSettingsOpen(false);
+        setInfoOpen(false);
+      }
     }
     document.addEventListener("pointerdown", onPointer);
     document.addEventListener("keydown", onKey);
@@ -228,7 +235,7 @@ export function App() {
       document.removeEventListener("pointerdown", onPointer);
       document.removeEventListener("keydown", onKey);
     };
-  }, [settingsOpen]);
+  }, [settingsOpen, infoOpen]);
 
   useEffect(() => {
     try {
@@ -240,7 +247,7 @@ export function App() {
   }, [customRaw]);
 
   const consideredCourses = useMemo(
-    () => catalog.courses.filter((course) => !disabledAreas[course.area]),
+    () => (catalog ? catalog.courses.filter((course) => !disabledAreas[course.area]) : []),
     [catalog, disabledAreas],
   );
 
@@ -257,6 +264,10 @@ export function App() {
 
   const plans = result?.plans?.length ? result.plans : [];
   const plan = plans[Math.min(planIndex, plans.length - 1)] ?? null;
+  const alternativesByPlan = useMemo(() => {
+    if (!requirements) return plans.map(() => []);
+    return plans.map((item) => planAlternatives(item, consideredCourses, requirements, semesters));
+  }, [plans, consideredCourses, requirements, semesters]);
 
   useEffect(() => {
     setPlanIndex(0);
@@ -275,6 +286,24 @@ export function App() {
       else next[courseId] = true;
       return next;
     });
+  }
+
+  function activateAlternative(swap) {
+    const outgoingPreference = preferenceOf(swap.outgoing, preferences);
+    const incomingPreference = preferenceOf(swap.incoming, preferences);
+    setPreferences((current) => ({
+      ...current,
+      [swap.incoming.id]: Math.max(incomingPreference, outgoingPreference, 1),
+      [swap.outgoing.id]: 0,
+    }));
+    setForced((current) => {
+      const next = { ...current };
+      delete next[swap.outgoing.id];
+      next[swap.incoming.id] = true;
+      return next;
+    });
+    setPlanIndex(0);
+    setAltPlanIndex(0);
   }
 
   function toggleSemester(id) {
@@ -312,6 +341,30 @@ export function App() {
     setCatalogSource("custom");
   }
 
+  function dismissHints() {
+    setHintsOpen(false);
+    try {
+      localStorage.setItem(HINTS_KEY, "seen");
+    } catch {
+      // The hints stay hidden for this visit.
+    }
+  }
+
+  function exportCatalog() {
+    if (!activeRaw) return;
+    const courses = (activeRaw.courses ?? []).map((course) => ({
+      ...course,
+      preference: preferences[course.id] ?? course.preference,
+    }));
+    const blob = new Blob([JSON.stringify({ ...activeRaw, courses }, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "modules.json";
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   function focusCourse(courseId) {
     document.getElementById(`course-${courseId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
@@ -333,18 +386,33 @@ export function App() {
     Boolean,
   ).length;
 
-  if (!catalog.requirements || !requirements || !plan) {
+  if (!catalog?.requirements || !requirements || !plan) {
+    const waiting = catalogSource !== "custom" && !tumRaw && tumState.status !== "error";
     return (
       <main className="fatal">
-        <h1>This module list cannot be read</h1>
-        <ul>
-          {catalog.errors.map((error) => (
-            <li key={error}>{error}</li>
-          ))}
-        </ul>
-        <button type="button" className="text-button" onClick={() => setCatalogSource("default")}>
-          Use the default list
-        </button>
+        <p className="eyebrow">TUM Informatics</p>
+        <h1>{waiting ? "Loading modules" : "This module list cannot be read"}</h1>
+        {waiting ? (
+          <p className="quiet-fatal">{tumState.message || "Fetching the current catalog from TUMonline."}</p>
+        ) : (
+          <ul>
+            {(catalog?.errors ?? [tumState.message || "The TUM catalog is not available yet."]).map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        )}
+        {!waiting && (
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => {
+              setCatalogSource("tum");
+              setTumNonce((nonce) => nonce + 1);
+            }}
+          >
+            Try again
+          </button>
+        )}
       </main>
     );
   }
@@ -403,7 +471,6 @@ export function App() {
           </div>
               <button type="button" className="toggle" onClick={() => setEditorOpen(true)}>
                 Modules
-                {usingTum && <span className="count">TUM</span>}
                 {usingCustom && <span className="count">My list</span>}
               </button>
         </div>
@@ -415,13 +482,58 @@ export function App() {
             <li>{formatCredits(requirements.totalCredits)} ECTS in total</li>
             <li>Blocks {requirements.areaQuotas.map((quota) => formatCredits(quota)).join(" · ")}</li>
             <li>At least {formatCredits(requirements.theoreticalCredits)} theory</li>
-            {openCredits > 0 && <li>{formatCredits(openCredits)} ECTS from any area</li>}
+            {openCredits > 0 && (
+              <li className={["rule-open", extraElectives ? "on" : "", infoOpen ? "pop-open" : ""].filter(Boolean).join(" ")}>
+                <button
+                  type="button"
+                  className={extraElectives ? "chip-switch on" : "chip-switch"}
+                  aria-pressed={extraElectives}
+                  aria-label="Add 10 ECTS instead of the internship"
+                  onClick={() => setExtraElectives((enabled) => !enabled)}
+                >
+                  <span />
+                </button>
+                {formatCredits(openCredits)} ECTS from any area
+                <span className="info" ref={infoRef}>
+                  <button
+                    type="button"
+                    className="info-button"
+                    aria-expanded={infoOpen}
+                    aria-label="About these credits"
+                    onClick={() => setInfoOpen((open) => !open)}
+                  >
+                    i
+                  </button>
+                  {infoOpen && (
+                    <span className="info-pop" role="dialog">
+                      Instead of the internship you can take 10 more ECTS from any area. The blocks stay the same, so this pool grows by 10 and the total goes from 53 to 63.
+                    </span>
+                  )}
+                </span>
+              </li>
+            )}
           </ul>
 
           {usingTum && tumState.status === "loading" && (
             <p className="note">Loading the current modules from TUM. {tumState.message}</p>
           )}
           {usingTum && tumState.status === "error" && <p className="note warn">{tumState.message}</p>}
+
+          {hintsOpen && (
+            <aside className="hints" aria-label="How to use this">
+              <div>
+                <p className="eyebrow">Start here</p>
+                <ol>
+                  <li>Rate a module from 0 to 5. The plan on the side updates.</li>
+                  <li>Exclude a whole area, or fold it with the arrow.</li>
+                  <li>The free-ECTS chip swaps the internship for 10 more credits. Penalties are under Settings.</li>
+                </ol>
+              </div>
+              <button type="button" className="text-button" onClick={dismissHints}>
+                Got it
+              </button>
+            </aside>
+          )}
 
           {catalog.warnings.length > 0 && (
             <ul className="note warn">
@@ -555,20 +667,38 @@ export function App() {
             </p>
           </div>
           <nav className="plan-nav" aria-label="Best plans">
-            {plans.map((item, index) => (
-              <button
-                key={item.courses.map((course) => course.id).join("-") || index}
-                type="button"
-                aria-pressed={index === Math.min(planIndex, plans.length - 1)}
-                onClick={() => setPlanIndex(index)}
-              >
-                <span>{index + 1}</span>
-                <span>
-                  {formatCredits(item.totals.credits)} ECTS · {formatCredits(item.totals.theoretical)} theory
-                </span>
-                <span>{formatScore(item.score)}</span>
-              </button>
-            ))}
+            {plans.map((item, index) => {
+              const alternativeCount = alternativesByPlan[index]?.length ?? 0;
+              const selected = index === Math.min(planIndex, plans.length - 1);
+              return (
+                <div key={item.courses.map((course) => course.id).join("-") || index} className="plan-row">
+                  <button
+                    type="button"
+                    className="plan-pick"
+                    aria-pressed={selected}
+                    onClick={() => setPlanIndex(index)}
+                  >
+                    <span>{index + 1}</span>
+                    <span>
+                      {formatCredits(item.totals.credits)} ECTS · {formatCredits(item.totals.theoretical)} theory
+                    </span>
+                    <span>{formatScore(item.score)}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="alt-count"
+                    disabled={alternativeCount === 0}
+                    aria-label={`${alternativeCount} alternatives`}
+                    onClick={() => {
+                      setPlanIndex(index);
+                      setAltPlanIndex(index);
+                    }}
+                  >
+                    {alternativeCount}
+                  </button>
+                </div>
+              );
+            })}
           </nav>
 
           {!plan.feasible && (
@@ -598,17 +728,6 @@ export function App() {
           </p>
 
           <div className="controls">
-            <label className="check elective">
-              <input
-                type="checkbox"
-                checked={extraElectives}
-                onChange={(event) => setExtraElectives(event.target.checked)}
-              />
-              <span>
-                Add 10 ECTS instead of the internship
-                <small>These credits can come from any area. The blocks stay the same.</small>
-              </span>
-            </label>
             <div className="plan-actions">
               <button type="button" className="ghost" onClick={copyPlan}>
                 {copied ? "Copied" : "Copy plan"}
@@ -667,22 +786,32 @@ export function App() {
         </div>
       </aside>
 
+      {altPlanIndex != null && plans.length > 0 && (
+        <AlternativeDialog
+          planNumber={Math.min(altPlanIndex, plans.length - 1) + 1}
+          swaps={alternativesByPlan[Math.min(altPlanIndex, plans.length - 1)] ?? []}
+          areaById={areaById}
+          preferences={preferences}
+          onActivate={activateAlternative}
+          onClose={() => setAltPlanIndex(null)}
+        />
+      )}
+
       <CatalogEditor
         open={editorOpen}
         onClose={() => setEditorOpen(false)}
-        source={usingTum ? "tum" : usingCustom ? "custom" : "default"}
-        defaultRaw={rawCatalog}
+        source={usingCustom ? "custom" : "tum"}
         customRaw={customRaw}
         tumRaw={tumRaw}
         tumStatus={tumState.status}
         tumMessage={tumState.message}
-        onUseDefault={() => setCatalogSource("default")}
         onUseTum={() => {
           setCatalogSource("tum");
           setTumNonce((nonce) => nonce + 1);
         }}
         onUseCustom={() => customRaw && setCatalogSource("custom")}
         onSaveCustom={saveCustom}
+        onExport={exportCatalog}
       />
     </div>
   );
@@ -877,4 +1006,83 @@ function planText(plan, requirements, areaById) {
     lines.push("");
   }
   return lines.join("\n").trim();
+}
+
+function AlternativeDialog({ planNumber, swaps, areaById, preferences, onActivate, onClose }) {
+  useEffect(() => {
+    function onKey(event) {
+      if (event.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const groups = [];
+  const byId = new Map();
+  for (const swap of swaps) {
+    let group = byId.get(swap.outgoing.id);
+    if (!group) {
+      group = { outgoing: swap.outgoing, swaps: [] };
+      byId.set(swap.outgoing.id, group);
+      groups.push(group);
+    }
+    group.swaps.push(swap);
+  }
+
+  return (
+    <div className="overlay" role="presentation" onClick={onClose}>
+      <div
+        className="dialog alternatives"
+        role="dialog"
+        aria-label={`Alternatives for plan ${planNumber}`}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="dialog-head">
+          <div>
+            <p className="eyebrow">Plan {planNumber}</p>
+            <h2>Alternatives</h2>
+            <p>
+              Another module with the same credits can take this place. Picking one pins it and sets the replaced
+              module to 0.
+            </p>
+          </div>
+          <button type="button" className="text-button" onClick={onClose}>
+            Close
+          </button>
+        </div>
+        {groups.length === 0 ? (
+          <p className="form-note">This plan has no swaps.</p>
+        ) : (
+          groups.map((group) => (
+            <section key={group.outgoing.id} className="alt-group">
+              <h3>
+                Instead of <b>{group.outgoing.id}</b> {group.outgoing.name}
+              </h3>
+              <ul>
+                {group.swaps.map((swap) => {
+                  const area = areaById.get(swap.incoming.area);
+                  const preference = preferenceOf(swap.incoming, preferences);
+                  return (
+                    <li key={`${group.outgoing.id}-${swap.incoming.id}`}>
+                      <button type="button" onClick={() => onActivate(swap)}>
+                        <span>
+                          <b>{swap.incoming.id}</b> {swap.incoming.name}
+                        </span>
+                        <small>
+                          {area?.short ?? area?.name} · {formatCredits(swap.incoming.credits)} ECTS
+                          {swap.incoming.theoretical ? " · Theory" : ""}
+                          {swap.incoming.semester ? ` · ${SEMESTER_LABEL[swap.incoming.semester]}` : ""}
+                          {preference > 0 ? ` · preference ${preference}` : " · unrated"}
+                        </small>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))
+        )}
+      </div>
+    </div>
+  );
 }
