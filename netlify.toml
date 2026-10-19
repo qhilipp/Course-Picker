@@ -1,0 +1,19 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# The app calls /tumonline from the browser. Netlify fetches TUMonline
+# on the server, so the live catalog works without a CORS error.
+[[redirects]]
+  from = "/tumonline/*"
+  to = "https://campus.tum.de/tumonline/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

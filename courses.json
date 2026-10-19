@@ -9,45 +9,253 @@
     "maxOverage": 24,
     "areaQuotas": [18, 8, 8],
     "areas": [
-      { "id": "mla", "name": "Maschinelles Lernen und Datenanalyse", "short": "MLA" },
-      { "id": "alg", "name": "Algorithmen", "short": "ALG" },
-      { "id": "cgv", "name": "Computergrafik und Vision", "short": "CGV" },
-      { "id": "sp", "name": "Sicherheit und Datenschutz", "short": "SP" }
+      { "id": "rob", "name": "Robotics", "short": "ROB" },
+      { "id": "mla", "name": "Machine Learning and Analytics", "short": "MLA" },
+      { "id": "cgv", "name": "Computer Graphics and Vision", "short": "CGV" },
+      { "id": "alg", "name": "Algorithms", "short": "ALG" },
+      { "id": "sp", "name": "Security and Privacy", "short": "SP" }
     ]
   },
   "courses": [
     {
-      "id": "IN2346",
-      "name": "Introduction to Deep Learning",
+      "id": "CIT3330000",
+      "name": "Introduction to Mobile Robotics",
       "credits": 6,
-      "semester": "winter",
+      "semester": null,
       "preference": 3,
       "theoretical": false,
-      "area": "mla"
+      "area": "rob"
     },
     {
-      "id": "IN2361",
-      "name": "Natural Language Processing",
-      "credits": 6,
-      "semester": "winter",
+      "id": "CIT4330017",
+      "name": "Trustworthy Machine Learning Systems",
+      "credits": 3,
+      "semester": null,
       "preference": 3,
       "theoretical": false,
-      "area": "mla"
+      "area": "rob"
     },
     {
-      "id": "CIT433021",
-      "name": "Fundamentals of Foundation Models",
+      "id": "CIT433034",
+      "name": "Advanced Multi-Fingered Robotic Hands: Dextrous Manipulation and Learning AI",
+      "credits": 3,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "CIT433037",
+      "name": "Advanced Robot Learning and Decision-Making",
       "credits": 5,
-      "semester": "winter",
+      "semester": null,
       "preference": 3,
       "theoretical": false,
-      "area": "mla"
+      "area": "rob"
     },
     {
-      "id": "CITHN2014",
-      "name": "Foundations and Application of Generative AI",
+      "id": "CIT433039",
+      "name": "Intelligent Robots with a Sense of Smell",
+      "credits": 7,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "CIT433058",
+      "name": "Machine Learning for Multi-Robot Exploration",
+      "credits": 3,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "CIT433059",
+      "name": "Spatial Human-Robot Interaction",
       "credits": 6,
-      "semester": "winter",
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "CIT436000",
+      "name": "Legged Robots",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "EI70140",
+      "name": "Optimal Control and Decision Making",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2060",
+      "name": "Real-Time Systems",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2061",
+      "name": "Introduction to Digital Signal Processing",
+      "credits": 7,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2067",
+      "name": "Robotics",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2068",
+      "name": "Sensor-based Robotic Manipulation and Locomotion",
+      "credits": 3,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2138",
+      "name": "Robot Motion Planning",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2222",
+      "name": "Cognitive Systems",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2305",
+      "name": "Cyber-Physical Systems",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2308",
+      "name": "Programming and Control for Human-Robot Interaction",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2318",
+      "name": "Autonomous Navigation for Flying Robots",
+      "credits": 2,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2352",
+      "name": "Applied Biorobotics",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2356",
+      "name": "Autonomous Driving",
+      "credits": 3,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2376",
+      "name": "Advanced Robot Control and Learning",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2383",
+      "name": "Formal Methods for Cyber-Physical Systems",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2405",
+      "name": "Neuroprosthetics: Artificial Limbs",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN2406",
+      "name": "Fundamentals of Artificial Intelligence",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "IN3460",
+      "name": "Selected Topics in Robotics",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "MW2411",
+      "name": "Concepts and Software Design for Cyber-Physical Systems",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "rob"
+    },
+    {
+      "id": "CIT4230002",
+      "name": "Advanced Natural Language Processing",
+      "credits": 5,
+      "semester": null,
       "preference": 3,
       "theoretical": false,
       "area": "mla"
@@ -56,43 +264,421 @@
       "id": "CIT4230003",
       "name": "Advanced Machine Learning: Deep Generative Models",
       "credits": 3,
-      "semester": "summer",
+      "semester": null,
       "preference": 3,
       "theoretical": false,
       "area": "mla"
     },
     {
-      "id": "IN2064",
-      "name": "Maschinelles Lernen",
-      "credits": 8,
-      "semester": "winter",
+      "id": "CIT4230006",
+      "name": "Causal Inference in Time Series",
+      "credits": 5,
+      "semester": null,
       "preference": 3,
       "theoretical": false,
       "area": "mla"
     },
     {
-      "id": "IN2239",
-      "name": "Algorithmic Game Theory",
-      "credits": 5,
-      "semester": "summer",
+      "id": "CIT423004",
+      "name": "Robust Machine Learning",
+      "credits": 3,
+      "semester": null,
       "preference": 3,
-      "theoretical": true,
-      "area": "alg"
+      "theoretical": false,
+      "area": "mla"
     },
     {
-      "id": "CIT423012",
-      "name": "Statistical and Computational Hardness of Learning",
+      "id": "CIT423009",
+      "name": "Multi-modal AI in Medicine",
       "credits": 5,
-      "semester": "summer",
+      "semester": null,
       "preference": 3,
-      "theoretical": true,
-      "area": "alg"
+      "theoretical": false,
+      "area": "mla"
     },
     {
-      "id": "IN2304",
-      "name": "Online and Approximation Algorithms",
+      "id": "CIT423021",
+      "name": "Machine Learning and Structure: Geometry, Discrete Structure and Algorithms",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "CIT433021",
+      "name": "Fundamentals of Foundation Models",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "CIT433027",
+      "name": "Advanced Deep Learning for Robotics",
       "credits": 8,
-      "semester": "winter",
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "CITHN2014",
+      "name": "Foundations and Application of Generative AI",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2298",
+      "name": "Advanced Deep Learning for Physics",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2323",
+      "name": "Machine Learning for Graphs and Sequential Data",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2346",
+      "name": "Introduction to Deep Learning",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2357",
+      "name": "Machine Learning for Computer Vision",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2361",
+      "name": "Natural Language Processing",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2395",
+      "name": "Legal Data Science and Informatics",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2403",
+      "name": "Artificial Intelligence in Medicine",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN2408",
+      "name": "Artificial Intelligence in Medicine II",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "IN3440",
+      "name": "Selected Topics in Machine Learning and Analytics",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "LS20056",
+      "name": "Computational Neuroscience",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "LS20057",
+      "name": "NeuroAI and Machine Learning in Neuroscience",
+      "credits": 7,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "mla"
+    },
+    {
+      "id": "CIT423018",
+      "name": "AI-Driven Extended Reality in Medicine",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN0037",
+      "name": "Game Physics",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2015",
+      "name": "Image Synthesis",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2016",
+      "name": "Image Understanding II: Robot Vision",
+      "credits": 4,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2018",
+      "name": "Augmented Reality",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2023",
+      "name": "Image Understanding I: Machine Vision Algorithms",
+      "credits": 3,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2026",
+      "name": "Visual Data Analytics",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2111",
+      "name": "3D User Interfaces",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2124",
+      "name": "Basic Mathematical Methods for Imaging and Visualization",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2133",
+      "name": "Principles of Computer Vision",
+      "credits": 4,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2210",
+      "name": "Tracking and Detection in Computer Vision",
+      "credits": 7,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2236",
+      "name": "Virtual Physics: Using Modern Modeling Methodologies for Computer Simulation",
+      "credits": 4,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2238",
+      "name": "Analysis of Three-Dimensional Shapes",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2297",
+      "name": "Geometry Processing",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2329",
+      "name": "Probabilistic Graphical Models in Computer Vision",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2330",
+      "name": "Convex Optimization for Computer Vision",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2354",
+      "name": "3D Scanning & Motion Capture",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2355",
+      "name": "Robotic 3D Vision",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2369",
+      "name": "Machine Vision",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2375",
+      "name": "Computer Vision III: Detection, Segmentation, and Tracking",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2384",
+      "name": "Numerical Algorithms in Computer Vision and Machine Learning",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2389",
+      "name": "Advanced Deep Learning for Computer Vision: Dynamic Vision",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2390",
+      "name": "Advanced Deep Learning for Computer Vision: Visual Computing",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2392",
+      "name": "Machine Learning for 3D Geometry",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN2409",
+      "name": "Inverse Problems in Medical Imaging",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "IN3200",
+      "name": "Selected Topics in Computer Graphics and Vision",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "MH4L004277",
+      "name": "XR: Virtual-, Mixed-, and Augmented Reality",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "cgv"
+    },
+    {
+      "id": "CIT323004",
+      "name": "Advanced Algorithms",
+      "credits": 8,
+      "semester": null,
       "preference": 3,
       "theoretical": true,
       "area": "alg"
@@ -101,43 +687,331 @@
       "id": "CIT423011",
       "name": "Topics in Computational Social Choice",
       "credits": 5,
-      "semester": "winter",
+      "semester": null,
       "preference": 3,
       "theoretical": true,
       "area": "alg"
     },
     {
-      "id": "IN2015",
-      "name": "Image Synthesis",
+      "id": "CIT423012",
+      "name": "Statistical and Computational Hardness of Learning",
       "credits": 5,
-      "semester": "winter",
+      "semester": null,
       "preference": 3,
-      "theoretical": false,
-      "area": "cgv"
+      "theoretical": true,
+      "area": "alg"
     },
     {
-      "id": "IN2369",
-      "name": "Industrielle Bildverarbeitung",
+      "id": "IN0024",
+      "name": "Operations Research",
       "credits": 6,
-      "semester": "winter",
+      "semester": null,
       "preference": 3,
-      "theoretical": false,
-      "area": "cgv"
+      "theoretical": true,
+      "area": "alg"
     },
     {
-      "id": "IN2101",
-      "name": "Network Security",
+      "id": "IN2003",
+      "name": "Efficient Algorithms and Data Structures",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2004",
+      "name": "Efficient Algorithms and Data Structures II",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2007",
+      "name": "Complexity Theory",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2011",
+      "name": "Parallel Algorithms",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2158",
+      "name": "Advanced Network and Graph Algorithms",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2160",
+      "name": "Randomized Algorithms",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2211",
+      "name": "Auction Theory and Market Design",
       "credits": 5,
-      "semester": "winter",
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2229",
+      "name": "Computational Social Choice",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2239",
+      "name": "Algorithmic Game Theory",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN2304",
+      "name": "Online and Approximation Algorithms",
+      "credits": 8,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "IN3410",
+      "name": "Selected Topics in Algorithms",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": true,
+      "area": "alg"
+    },
+    {
+      "id": "CIT3330002",
+      "name": "IT Security 2",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "CIT4330001",
+      "name": "Machine Learning and IT-Security",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "CIT4330009",
+      "name": "IoT Security",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "CIT433040",
+      "name": "Embedded Systems and Security",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "CIT433044",
+      "name": "Trustworthy Distributed Learning",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "CIT433046",
+      "name": "Secure Autonomous Systems",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "EI70520",
+      "name": "Circuit Design for Security",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "EI71029",
+      "name": "Physical Unclonable Functions",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "EI71060",
+      "name": "Security in Communications and Storage",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "EI71070",
+      "name": "Advanced Cryptographic Implementations",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "EI71073",
+      "name": "Quantum Computers and Quantum Secure Communications",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "EI7243",
+      "name": "Secure Implementation of Cryptographic Algorithms",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "EI73451",
+      "name": "Information Theoretic Security",
+      "credits": 5,
+      "semester": null,
       "preference": 3,
       "theoretical": false,
       "area": "sp"
     },
     {
       "id": "EI75671",
-      "name": "Ringvorlesung Systemsicherheit",
+      "name": "Lecture Series System Security",
       "credits": 3,
-      "semester": "winter",
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "IN2101",
+      "name": "Network Security",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "IN2161",
+      "name": "Networks for Monetary Transactions",
+      "credits": 3,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "IN2178",
+      "name": "Security Engineering",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "IN2194",
+      "name": "Peer-to-Peer-Systems and Security",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "IN2313",
+      "name": "Secure Coding",
+      "credits": 6,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "IN2341",
+      "name": "Current Trends in IT Security",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "IN2362",
+      "name": "Language-based Security",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "IN2407",
+      "name": "Hardware Security",
+      "credits": 5,
+      "semester": null,
+      "preference": 3,
+      "theoretical": false,
+      "area": "sp"
+    },
+    {
+      "id": "IN3470",
+      "name": "Selected Topics in Security and Privacy",
+      "credits": 5,
+      "semester": null,
       "preference": 3,
       "theoretical": false,
       "area": "sp"

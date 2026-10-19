@@ -5,5 +5,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    proxy: {
+      "/tumonline": {
+        target: "https://campus.tum.de",
+        changeOrigin: true,
+      },
+    },
   },
 });

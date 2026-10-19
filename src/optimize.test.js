@@ -355,6 +355,29 @@ test("Theorie über dem Minimum wird bestraft", () => {
   assert.equal(plan.totals.theoryOverage, 0);
 });
 
+test("die Theorie-Strafe ist unabhängig von der Credit-Strafe", () => {
+  const raw = {
+    requirements: {
+      totalCredits: 10,
+      theoreticalCredits: 4,
+      overagePenalty: 0,
+      maxOverage: 0,
+      areaQuotas: [10],
+      areas: [{ id: "a", name: "A" }],
+    },
+    courses: [
+      course({ id: "viel-theorie", name: "Viel", area: "a", credits: 10, preference: 5, theoretical: true }),
+      course({ id: "genau", name: "Genau", area: "a", credits: 4, preference: 2, theoretical: true }),
+      course({ id: "rest", name: "Rest", area: "a", credits: 6, preference: 2, theoretical: false }),
+    ],
+  };
+  const { courses, requirements } = normalizeCatalog(raw);
+  const strict = recommend(courses, requirements, { overagePenalty: 0, theoryPenalty: 2 });
+  assert.deepEqual(strict.courses.map((item) => item.id).sort(), ["genau", "rest"]);
+  const loose = recommend(courses, requirements, { overagePenalty: 0, theoryPenalty: 0 });
+  assert.deepEqual(loose.courses.map((item) => item.id), ["viel-theorie"]);
+});
+
 test("der Beispielkatalog liefert einen gültigen Plan", () => {
   const raw = JSON.parse(readFileSync(new URL("../courses.json", import.meta.url), "utf8"));
   const catalog = normalizeCatalog(raw);
@@ -362,8 +385,7 @@ test("der Beispielkatalog liefert einen gültigen Plan", () => {
   assert.equal(catalog.requirements.totalCredits, 53);
   assert.deepEqual(catalog.requirements.areaQuotas, [18, 8, 8]);
   assert.equal(catalog.requirements.theoreticalCredits, 10);
-  assert.equal(catalog.courses.length, 15);
-  assert.equal(catalog.courses.some((course) => course.id === "IN2346"), true);
+  assert.ok(catalog.courses.length >= 15);
 
   const started = performance.now();
   const plan = recommend(catalog.courses, catalog.requirements);
@@ -385,7 +407,7 @@ test("der Beispielkatalog liefert einen gültigen Plan", () => {
   for (let index = 1; index < plan.plans.length; index++) {
     assert.ok(plan.plans[index - 1].score >= plan.plans[index].score - 1e-9);
   }
-  assert.ok(elapsed < 1500, `Optimierung dauerte ${elapsed.toFixed(0)} ms`);
+  assert.ok(elapsed < 1000, `Optimierung dauerte ${elapsed.toFixed(0)} ms`);
   console.log(
     `Beispielplan: ${plan.courses.length} Kurse, ${plan.totals.credits} ECTS, Nutzen ${plan.score}, ${elapsed.toFixed(0)} ms`,
   );
