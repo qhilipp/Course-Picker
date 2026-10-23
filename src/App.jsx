@@ -8,6 +8,7 @@ const CATALOG_KEY = "course-picker-catalog";
 const TUM_CACHE_KEY = "course-picker-tum";
 const HINTS_KEY = "course-picker-hints";
 const EXTRA_CREDITS = 10;
+const STANDARD_TOTAL = 43;
 
 const PREFERENCES = [
   { value: 0, label: "0", hint: "Skip" },
@@ -113,6 +114,17 @@ function preferenceOf(course, preferences) {
   return preferences[course.id] ?? course.preference;
 }
 
+function withStandardTotal(raw) {
+  if (!raw) return raw;
+  return {
+    ...raw,
+    requirements: {
+      ...(raw.requirements ?? {}),
+      totalCredits: STANDARD_TOTAL,
+    },
+  };
+}
+
 function withExtraCredits(requirements, enabled) {
   if (!requirements || !enabled) return requirements;
   return {
@@ -160,7 +172,7 @@ export function App() {
   const [infoOpen, setInfoOpen] = useState(false);
   const infoRef = useRef(null);
 
-  const activeRaw = catalogSource === "custom" && customRaw ? customRaw : tumRaw;
+  const activeRaw = catalogSource === "custom" && customRaw ? customRaw : withStandardTotal(tumRaw);
   const catalog = useMemo(() => (activeRaw ? normalizeCatalog(activeRaw) : null), [activeRaw]);
   const requirements = useMemo(
     () => withExtraCredits(catalog?.requirements ?? null, extraElectives),
@@ -420,7 +432,8 @@ export function App() {
   const { meta } = catalog;
   const areaById = new Map(requirements.areas.map((area) => [area.id, area]));
   const blockSum = requirements.areaQuotas.reduce((sum, quota) => sum + quota, 0);
-  const openCredits = requirements.totalCredits - blockSum - requirements.theoreticalCredits;
+  const openCredits = Math.max(0, requirements.totalCredits - blockSum - requirements.theoreticalCredits);
+  const baseTotal = requirements.totalCredits - (extraElectives ? EXTRA_CREDITS : 0);
   const needle = query.trim().toLowerCase();
   const visibleAreas = requirements.areas.filter((area) => areaFilter === "all" || area.id === areaFilter);
 
@@ -482,8 +495,7 @@ export function App() {
             <li>{formatCredits(requirements.totalCredits)} ECTS in total</li>
             <li>Blocks {requirements.areaQuotas.map((quota) => formatCredits(quota)).join(" · ")}</li>
             <li>At least {formatCredits(requirements.theoreticalCredits)} theory</li>
-            {openCredits > 0 && (
-              <li className={["rule-open", extraElectives ? "on" : "", infoOpen ? "pop-open" : ""].filter(Boolean).join(" ")}>
+            <li className={["rule-open", extraElectives ? "on" : "", infoOpen ? "pop-open" : ""].filter(Boolean).join(" ")}>
                 <button
                   type="button"
                   className={extraElectives ? "chip-switch on" : "chip-switch"}
@@ -506,12 +518,11 @@ export function App() {
                   </button>
                   {infoOpen && (
                     <span className="info-pop" role="dialog">
-                      Instead of the internship you can take 10 more ECTS from any area. The blocks stay the same, so this pool grows by 10 and the total goes from 53 to 63.
+                      Instead of the internship you can take {EXTRA_CREDITS} more ECTS from any area. The blocks stay the same, so this pool grows by {EXTRA_CREDITS} and the total goes from {formatCredits(baseTotal)} to {formatCredits(baseTotal + EXTRA_CREDITS)}.
                     </span>
                   )}
                 </span>
               </li>
-            )}
           </ul>
 
           {usingTum && tumState.status === "loading" && (

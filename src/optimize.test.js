@@ -382,7 +382,7 @@ test("der Beispielkatalog liefert einen gültigen Plan", () => {
   const raw = JSON.parse(readFileSync(new URL("../courses.json", import.meta.url), "utf8"));
   const catalog = normalizeCatalog(raw);
   assert.deepEqual(catalog.errors, []);
-  assert.equal(catalog.requirements.totalCredits, 53);
+  assert.equal(catalog.requirements.totalCredits, 43);
   assert.deepEqual(catalog.requirements.areaQuotas, [18, 8, 8]);
   assert.equal(catalog.requirements.theoreticalCredits, 10);
   assert.ok(catalog.courses.length >= 15);
@@ -392,7 +392,7 @@ test("der Beispielkatalog liefert einen gültigen Plan", () => {
   const elapsed = performance.now() - started;
 
   assert.equal(plan.feasible, true, JSON.stringify({ deficits: plan.deficits, assignment: plan.assignment }));
-  assert.ok(plan.totals.credits >= 53);
+  assert.ok(plan.totals.credits >= 43);
   assert.ok(plan.totals.theoretical >= 10);
   const blockAreas = plan.assignment.map((slot) => slot.areaId);
   assert.equal(new Set(blockAreas).size, 3);

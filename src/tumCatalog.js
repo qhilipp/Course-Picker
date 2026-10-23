@@ -172,7 +172,7 @@ export function buildImportedCatalog(baseRaw, collected) {
       source: SOURCE_URL,
     },
     requirements: {
-      totalCredits: base.totalCredits ?? 53,
+      totalCredits: base.totalCredits ?? 43,
       theoreticalCredits: base.theoreticalCredits ?? 10,
       overagePenalty: base.overagePenalty ?? 0.75,
       maxOverage: base.maxOverage ?? 24,

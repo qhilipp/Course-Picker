@@ -3,7 +3,7 @@
     "title": "Kurswahl"
   },
   "requirements": {
-    "totalCredits": 53,
+    "totalCredits": 43,
     "theoreticalCredits": 10,
     "overagePenalty": 0.75,
     "maxOverage": 24,
